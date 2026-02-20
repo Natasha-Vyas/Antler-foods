@@ -1,15 +1,15 @@
 export default function DashboardNewRestaurantPage() {
   return (
     <section className="space-y-5">
-      <h1 className="text-[54px] font-semibold tracking-tight text-[#101827]">New restaurant</h1>
+      <h1 className="text-[40px] font-semibold tracking-tight text-[#101827]">New restaurant</h1>
 
       <div className="overflow-hidden rounded-3xl border border-[#d7e2e6] bg-white">
         <div className="border-b border-[#d8e3e7] px-8 py-5">
-          <h2 className="text-[42px] font-semibold text-[#111827]">New restaurant</h2>
+          <h2 className="text-[28px] font-semibold text-[#111827]">New restaurant</h2>
         </div>
 
         <div className="space-y-8 p-8">
-          <div className="flex flex-wrap items-center gap-4 text-[22px] text-[#6b7280]">
+          <div className="flex flex-wrap items-center gap-4 text-[18px] text-[#6b7280]">
             <StepChip number={1} active label="Restaurant info" />
             <StepConnector />
             <StepChip number={2} label="Business info" />
@@ -18,19 +18,19 @@ export default function DashboardNewRestaurantPage() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-[30px] font-semibold text-[#111827]">Create Restaurant</h3>
-            <p className="border-l-4 border-[#ebc54a] pl-4 text-[20px] leading-relaxed text-[#111827]">
+            <h3 className="text-[24px] font-semibold text-[#111827]">Create Restaurant</h3>
+            <p className="border-l-4 border-[#ebc54a] pl-4 text-[16px] leading-relaxed text-[#111827]">
               Please select whether you are creating a completely new restaurant/franchise
               or adding this restaurant to an existing franchise in our system.
             </p>
-            <div className="space-y-3 text-[18px] text-[#111827]">
+            <div className="space-y-3 text-[14px] text-[#111827]">
               <OptionRow label="Create a new restaurant/franchise" />
               <OptionRow label="Add this restaurant to an existing franchise" />
             </div>
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-[32px] font-semibold underline">Associated Restaurant(s)</h4>
+            <h4 className="text-[24px] font-semibold underline">Associated Restaurant(s)</h4>
             <div className="flex min-h-[140px] max-w-[390px] items-center justify-center rounded-2xl border border-[#dce5ea] bg-white text-[20px] font-semibold text-[#111827]">
               + Add restaurant
             </div>
