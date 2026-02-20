@@ -1,8 +1,8 @@
 import type { User } from "@nhost/nhost-js";
 
-export type AppRole = "admin" | "manager" | "user";
+export type AppRole = "admin" | "manager" | "client" | "user";
 
-const ALLOWED_ROLES = new Set<AppRole>(["admin", "manager", "user"]);
+const ALLOWED_ROLES = new Set<AppRole>(["admin", "manager", "client", "user"]);
 
 function toRole(value: unknown): AppRole | null {
   if (typeof value !== "string") {
@@ -21,20 +21,69 @@ function readRecord(value: unknown): Record<string, unknown> | null {
     : null;
 }
 
+function toRoleFromList(value: unknown): AppRole | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+
+  for (const item of value) {
+    const role = toRole(item);
+    if (role) {
+      return role;
+    }
+  }
+
+  return null;
+}
+
+export function getRoleFromHasuraClaims(claimsInput: unknown): AppRole | null {
+  const rawClaims = readRecord(claimsInput);
+  if (!rawClaims) {
+    return null;
+  }
+
+  const hasuraClaims =
+    readRecord(rawClaims["https://hasura.io/jwt/claims"]) ?? rawClaims;
+
+  const candidates: unknown[] = [
+    hasuraClaims["x-hasura-default-role"],
+    hasuraClaims["x-hasura-role"],
+  ];
+
+  for (const candidate of candidates) {
+    const role = toRole(candidate);
+    if (role) {
+      return role;
+    }
+  }
+
+  return toRoleFromList(hasuraClaims["x-hasura-allowed-roles"]);
+}
+
 export function getUserRole(user: User | null | undefined): AppRole {
   if (!user) {
     return "user";
   }
 
+  const userRecord = readRecord(user);
   const metadata = readRecord(user.metadata);
-  const claims = readRecord(metadata?.claims ?? metadata?.jwtClaims);
-  const hasuraClaims = readRecord(claims?.["https://hasura.io/jwt/claims"]);
+  const roleFromUserClaims = getRoleFromHasuraClaims(
+    userRecord?.claims ?? userRecord?.jwtClaims ?? userRecord?.customClaims,
+  );
+  if (roleFromUserClaims) {
+    return roleFromUserClaims;
+  }
+
+  const metadataClaims = metadata?.claims ?? metadata?.jwtClaims;
+  const roleFromMetadataClaims = getRoleFromHasuraClaims(metadataClaims);
+  if (roleFromMetadataClaims) {
+    return roleFromMetadataClaims;
+  }
 
   const candidates: unknown[] = [
     metadata?.role,
     metadata?.userRole,
     metadata?.["x-hasura-default-role"],
-    hasuraClaims?.["x-hasura-default-role"],
     user.defaultRole,
     ...user.roles,
   ];

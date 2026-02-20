@@ -3,11 +3,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuthenticationStatus, useSignInEmailPassword } from '@nhost/react';
+import {
+  useAuthenticationStatus,
+  useSignInEmailPassword,
+} from '@nhost/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { AuthInput } from './auth-input';
-import { DEFAULT_AUTH_REDIRECT } from '@/lib/auth/routes';
+import {
+  DEFAULT_AUTH_REDIRECT,
+} from '@/lib/auth/routes';
 import { isNhostConfigured } from '@/lib/nhost';
 import { sanitizeNextPath } from '@/lib/auth/sanitize-next-path';
 import { loginSchema, type LoginFormValues } from '@/lib/validation/auth';
@@ -28,9 +33,9 @@ export function LoginForm() {
 
   useEffect(() => {
     if (!isStatusLoading && isAuthenticated) {
-      router.replace(DEFAULT_AUTH_REDIRECT);
+      router.replace(redirectPath || DEFAULT_AUTH_REDIRECT);
     }
-  }, [isAuthenticated, isStatusLoading, router]);
+  }, [isAuthenticated, isStatusLoading, redirectPath, router]);
 
   const {
     register,
