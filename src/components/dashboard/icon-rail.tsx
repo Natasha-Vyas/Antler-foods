@@ -1,0 +1,124 @@
+import Link from "next/link";
+
+export type DashboardRailTab = "home" | "reservations" | "team";
+
+interface IconRailProps {
+  activeTab: DashboardRailTab;
+}
+
+const RAIL_TABS: Array<{
+  key: DashboardRailTab;
+  label: string;
+  href: string;
+  icon: JSX.Element;
+}> = [
+  {
+    key: "home",
+    label: "Home",
+    href: "/dashboard/new-restaurant",
+    icon: <StoreIcon />,
+  },
+  {
+    key: "reservations",
+    label: "Reservations",
+    href: "/dashboard/reservations",
+    icon: <ReservationIcon />,
+  },
+  {
+    key: "team",
+    label: "Team",
+    href: "/dashboard/team",
+    icon: <TeamIcon />,
+  },
+];
+
+export function IconRail({ activeTab }: IconRailProps) {
+  return (
+    <aside className="flex min-h-screen w-16 flex-col items-center border-r border-[#d7e2e6] bg-[#f6f7f7] py-4">
+      <div className="flex w-full flex-col gap-2">
+        {RAIL_TABS.map((tab) => {
+          const isActive = tab.key === activeTab;
+
+          return (
+            <div key={tab.key} className="group relative flex justify-center">
+              <Link
+                href={tab.href}
+                aria-label={tab.label}
+                className={`inline-flex h-12 w-12 items-center justify-center rounded-xl transition ${
+                  isActive
+                    ? "bg-[#e6f5ec] text-[#5dc67d]"
+                    : "text-[#111827] hover:bg-[#edf2f5]"
+                }`}
+              >
+                {tab.icon}
+              </Link>
+              <span className="pointer-events-none absolute left-[calc(100%+12px)] top-1/2 z-20 -translate-y-1/2 rounded-md bg-[#1f2937] px-2 py-1 text-xs font-medium text-white opacity-0 transition group-hover:opacity-100">
+                {tab.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
+
+function StoreIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 7h16l-1.5 4.5a2.6 2.6 0 0 1-2.5 1.8H8a2.6 2.6 0 0 1-2.5-1.8L4 7Z" />
+      <path d="M6 13.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-5.5" />
+      <path d="M9 17h6" />
+    </svg>
+  );
+}
+
+function ReservationIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="M8 7h8" />
+      <path d="M7 12v5" />
+      <path d="M17 12v5" />
+      <path d="M9 17h6" />
+    </svg>
+  );
+}
+
+function TeamIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="9" cy="7.5" r="3" />
+      <circle cx="16.5" cy="9" r="2.5" />
+      <path d="M3.5 18a5.5 5.5 0 0 1 11 0" />
+      <path d="M14 18a4 4 0 0 1 7.5-1.8" />
+    </svg>
+  );
+}
